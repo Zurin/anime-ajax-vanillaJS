@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Top Upcoming Anime</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Top Upcoming Anime</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="table-responsive">
+                        <table id="table-anime" class="table table-hover table-striped table-bordered" style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th>Ranking</th>
+                                    <th>Judul</th>
+                                    <th>Cover</th>
+                                    <th>Tipe</th>
+                                    <th>Jumlah Member</th>
+                                    <th>Awal rilis</th>
+                                    <th>Akhir rilis</th>
+                                    <th>Episode</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data_anime">
+                                <tr id="loading">
+                                    <td colspan="8">
+                                        <h4 align="center">Loading data....</h4>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("loading").remove();
+                    var data = JSON.parse(this.responseText);
+                    for (var i = 0; i < data.top.length; i++) {
+                        var tr = document.createElement('tr');
+                        var td1 = tr.appendChild(document.createElement('td'));
+                        var td2 = tr.appendChild(document.createElement('td'));
+                        var td21 = tr.appendChild(document.createElement('td'));
+                        var td3 = tr.appendChild(document.createElement('td'));
+                        var td4 = tr.appendChild(document.createElement('td'));
+                        var td5 = tr.appendChild(document.createElement('td'));
+                        var td6 = tr.appendChild(document.createElement('td'));
+                        var td7 = tr.appendChild(document.createElement('td'));
+                        td1.innerHTML = data.top[i].rank;
+                        td2.innerHTML = data.top[i].title;
+                        td21.innerHTML = "<img src='"+data.top[i].image_url+"'>";
+                        td3.innerHTML = data.top[i].type;
+                        td4.innerHTML = data.top[i].members;
+                        if (data.top[i].airing_start != null) {
+                            td5.innerHTML = data.top[i].airing_start;    
+                        } else {
+                            td5.innerHTML = "-";
+                        }
+                        if (data.top[i].airing_end != null) {
+                            td6.innerHTML = data.top[i].airing_end;
+                        } else {
+                            td6.innerHTML = "-";
+                        }                        
+                        td7.innerHTML = data.top[i].episodes;
+                        document.getElementById("data_anime").appendChild(tr);
+                    }
+                }
+            };
+            xmlhttp.open("GET", "https://api.jikan.moe/top/anime/1/upcoming", true);
+            xmlhttp.send();
+            
+    </script>
+</body>
+</html>
